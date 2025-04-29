@@ -50,7 +50,7 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-    Main = Window:AddTab({ Title = "Tab General", Icon = "sticky-note" }),
+    Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
     
 }
 local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Spam", Default = false})
@@ -235,6 +235,36 @@ Tabs.Main:AddButton({
 		local player = Players:FindFirstChild(selected)
 		if player then
 			player:Kick(kickReason)
+		end
+	end
+})
+local Players = game:GetService("Players")
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+	table.insert(playerNames, player.Name)
+end
+
+local selectedPlayerName = ""
+
+local DropKill = Tabs.Main:AddDropdown("DropKill", {
+	Title = "Select Player to Kill:",
+	Values = playerNames,
+	Multi = false,
+	Default = 1,
+	Callback = function(Value)
+		selectedPlayerName = Value
+	end
+})
+
+Tabs.Main:AddButton({
+	Title = "Kill Player",
+	Description = "",
+	Callback = function()
+		local selected = selectedPlayerName
+		local player = Players:FindFirstChild(selected)
+		if player and player.Character and player.Character:FindFirstChild("Humanoid") then
+			player.Character.Humanoid.Health = 0
 		end
 	end
 })
