@@ -364,9 +364,11 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 local targetPlayer = nil
-local fadeTime = 1
 
 local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    table.insert(playerNames, player.Name)
+end
 
 local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
     Title = "Select Target Player",
@@ -380,28 +382,11 @@ local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
 
 local function updatePlayerList()
     playerNames = {}
-    for _, plr in pairs(Players:GetPlayers()) do
-        if plr ~= player then
-            table.insert(playerNames, plr.Name)
-        end
+    for _, player in pairs(Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
     end
     PlayerDropdown.Values = playerNames
 end
-
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
-
-local Slider = Tabs.Main:AddSlider("Slider", {
-    Title = "Fade time (Min)",
-    Description = "",
-    Default = 1,
-    Min = 1,
-    Max = 1000,
-    Rounding = 1,
-    Callback = function(Value)
-        fadeTime = Value
-    end
-})
 
 Tabs.Main:AddButton({
     Title = "Troll Target",
@@ -414,9 +399,17 @@ Tabs.Main:AddButton({
                 blurEffect.Size = 100
                 blurEffect.Parent = screenGui
 
-                wait(fadeTime)
+                wait(1)
                 blurEffect:Destroy()
             end
         end
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "Reset Player List",
+    Description = "Reset the player list in the dropdown",
+    Callback = function()
+        updatePlayerList()
     end
 })
