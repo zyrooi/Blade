@@ -346,3 +346,62 @@ Tabs.Main:AddButton({
         end
     end
 })
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local targetPlayer = nil
+local fadeTime = 1
+
+local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
+    Title = "Select Target Player",
+    Values = {},
+    Multi = false,
+    Default = 1,
+    Callback = function(Value)
+        targetPlayer = Players:FindFirstChild(Value)
+    end
+})
+
+local function updatePlayerList()
+    local playerNames = {}
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= player then
+            table.insert(playerNames, plr.Name)
+        end
+    end
+    PlayerDropdown.Values = playerNames
+end
+
+Players.PlayerAdded:Connect(updatePlayerList)
+Players.PlayerRemoving:Connect(updatePlayerList)
+
+local Slider = Tabs.Main:AddSlider("Slider", {
+    Title = "Fade time (Min)",
+    Description = "",
+    Default = 1,
+    Min = 1,
+    Max = 1000,
+    Rounding = 1,
+    Callback = function(Value)
+        fadeTime = Value
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "Black Screen",
+    Description = "Make the screen blurry for the selected player",
+    Callback = function()
+        if targetPlayer then
+            local screenGui = targetPlayer:FindFirstChildOfClass("PlayerGui")
+            if screenGui then
+                local blurEffect = Instance.new("BlurEffect")
+                blurEffect.Size = 100  -- Tăng kích thước của blur để mờ đục mạnh hơn
+                blurEffect.Parent = screenGui
+
+                wait(fadeTime)  -- Thời gian mờ tùy chỉnh từ slider
+                blurEffect:Destroy()
+            end
+        end
+    end
+})
