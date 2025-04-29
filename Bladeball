@@ -67,6 +67,20 @@ spawn(function()
         end
     end
 end)
+local ToggleProok = Tabs.Main:AddToggle("ToggleProok", {Title = "Auto Spam (should not be turned on)", Default = false})
+ToggleProok:OnChanged(function(Value)
+    _G.ToggleProok = Value
+end)
+
+spawn(function()
+    while task.wait(-1011010100) do
+        if _G.ToggleProok then
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+            task.wait(-1011010100)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+        end
+    end
+end)
 local ToggleProAim = Tabs.Main:AddToggle("ToggleProAim", {Title = "Aimbot Ball", Default = false})
 ToggleProAim:OnChanged(function(Value)
     _G.ToggleProAim = Value
