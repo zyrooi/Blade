@@ -131,6 +131,10 @@ spawn(function()
         end
     end
 end)
+Tabs.Main:AddParagraph({
+        Title = "LocalPlayer",
+        Content = "!______!"
+    })
 local Players = game:GetService("Players")
 
 local playerNames = {}
@@ -196,6 +200,7 @@ Tabs.Main:AddButton({
 		end
 	end
 })
+
 local Players = game:GetService("Players")
 
 local playerNames = {}
@@ -311,6 +316,10 @@ Tabs.Main:AddButton({
 		end
 	end
 })
+Tabs.Main:AddParagraph({
+        Title = "Weapon",
+        Content = "!______!"
+    })
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -346,6 +355,10 @@ Tabs.Main:AddButton({
         end
     end
 })
+Tabs.Main:AddParagraph({
+        Title = "Troll Player",
+        Content = "!______!"
+    })
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -389,17 +402,17 @@ local Slider = Tabs.Main:AddSlider("Slider", {
 })
 
 Tabs.Main:AddButton({
-    Title = "Black Screen",
+    Title = "Dim the screen",
     Description = "Make the screen blurry for the selected player",
     Callback = function()
         if targetPlayer then
             local screenGui = targetPlayer:FindFirstChildOfClass("PlayerGui")
             if screenGui then
                 local blurEffect = Instance.new("BlurEffect")
-                blurEffect.Size = 100  -- Tăng kích thước của blur để mờ đục mạnh hơn
+                blurEffect.Size = 100
                 blurEffect.Parent = screenGui
 
-                wait(fadeTime)  -- Thời gian mờ tùy chỉnh từ slider
+                wait(fadeTime)
                 blurEffect:Destroy()
             end
         end
