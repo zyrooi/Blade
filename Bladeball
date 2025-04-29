@@ -138,7 +138,7 @@ for _, player in pairs(Players:GetPlayers()) do
 	table.insert(playerNames, player.Name)
 end
 
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
+local DropdownPlayer = Tabs.Main:AddDropdown("DropdownPlayer", {
 	Title = "Select Player",
 	Values = playerNames,
 	Multi = false,
@@ -193,6 +193,48 @@ Tabs.Main:AddButton({
 			if player ~= myPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
 				player.Character.HumanoidRootPart.Anchored = true
 			end
+		end
+	end
+})
+local Players = game:GetService("Players")
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+	table.insert(playerNames, player.Name)
+end
+
+local selectedPlayerName = ""
+local kickReason = ""
+
+local DropdownKick = Tabs.Main:AddDropdown("DropdownKick", {
+	Title = "Select Player:",
+	Values = playerNames,
+	Multi = false,
+	Default = 1,
+	Callback = function(Value)
+		selectedPlayerName = Value
+	end
+})
+
+local ReasonInput = Tabs.Main:AddInput("Reason Input", {
+	Title = "Kick Reason:",
+	Default = "",
+	Numeric = false,
+	Finished = false,
+	Placeholder = "Enter reason for kick",
+	Callback = function(Value)
+		kickReason = Value
+	end
+})
+
+Tabs.Main:AddButton({
+	Title = "Kick Player",
+	Description = "",
+	Callback = function()
+		local selected = selectedPlayerName
+		local player = Players:FindFirstChild(selected)
+		if player then
+			player:Kick(kickReason)
 		end
 	end
 })
