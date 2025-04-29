@@ -366,9 +366,11 @@ local character = player.Character or player.CharacterAdded:Wait()
 local targetPlayer = nil
 local fadeTime = 1
 
+local playerNames = {}
+
 local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
     Title = "Select Target Player",
-    Values = {},
+    Values = playerNames,
     Multi = false,
     Default = 1,
     Callback = function(Value)
@@ -377,7 +379,7 @@ local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
 })
 
 local function updatePlayerList()
-    local playerNames = {}
+    playerNames = {}
     for _, plr in pairs(Players:GetPlayers()) do
         if plr ~= player then
             table.insert(playerNames, plr.Name)
@@ -402,7 +404,7 @@ local Slider = Tabs.Main:AddSlider("Slider", {
 })
 
 Tabs.Main:AddButton({
-    Title = "Dim the screen",
+    Title = "Troll Target",
     Description = "Make the screen blurry for the selected player",
     Callback = function()
         if targetPlayer then
