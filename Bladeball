@@ -268,3 +268,46 @@ Tabs.Main:AddButton({
 		end
 	end
 })
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+	table.insert(playerNames, player.Name)
+end
+
+local selectedPlayerName = ""
+local originalSubject = Camera.CameraSubject
+
+local DropView = Tabs.Main:AddDropdown("DropView", {
+	Title = "Select Player to View:",
+	Values = playerNames,
+	Multi = false,
+	Default = 1,
+	Callback = function(Value)
+		selectedPlayerName = Value
+	end
+})
+
+Tabs.Main:AddButton({
+	Title = "View Player Camera",
+	Description = "",
+	Callback = function()
+		local selected = selectedPlayerName
+		local player = Players:FindFirstChild(selected)
+		if player and player.Character and player.Character:FindFirstChild("Humanoid") then
+			Camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
+		end
+	end
+})
+
+Tabs.Main:AddButton({
+	Title = "Reset My Camera",
+	Description = "",
+	Callback = function()
+		local myPlayer = Players.LocalPlayer
+		if myPlayer and myPlayer.Character and myPlayer.Character:FindFirstChild("Humanoid") then
+			Camera.CameraSubject = myPlayer.Character:FindFirstChild("Humanoid")
+		end
+	end
+})
