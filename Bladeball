@@ -302,7 +302,7 @@ Tabs.Main:AddButton({
 })
 
 Tabs.Main:AddButton({
-	Title = "Reset My Camera",
+	Title = "Reset Camera",
 	Description = "",
 	Callback = function()
 		local myPlayer = Players.LocalPlayer
@@ -310,4 +310,39 @@ Tabs.Main:AddButton({
 			Camera.CameraSubject = myPlayer.Character:FindFirstChild("Humanoid")
 		end
 	end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local weaponList = {}
+
+for _, item in pairs(character:GetChildren()) do
+    if item:IsA("Script") or item:IsA("LocalScript") or item:IsA("ModuleScript") then
+        table.insert(weaponList, item.Name)
+    end
+end
+
+local selectedWeaponName = ""
+
+local WeaponDropdown = Tabs.Main:AddDropdown("Weapon Dropdown", {
+    Title = "Select Weapon",
+    Values = weaponList,
+    Multi = false,
+    Default = 1,
+    Callback = function(Value)
+        selectedWeaponName = Value
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "Hide Weapon",
+    Description = "",
+    Callback = function()
+        for _, weapon in pairs(character:GetChildren()) do
+            if weapon.Name == selectedWeaponName and (weapon:IsA("Script") or weapon:IsA("LocalScript") or weapon:IsA("ModuleScript")) then
+                weapon.Enabled = false
+            end
+        end
+    end
 })
