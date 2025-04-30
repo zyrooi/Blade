@@ -67,38 +67,43 @@ spawn(function()
         end
     end
 end)
-local RunService = game:GetService("RunService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
-local ToggleAutoF = Tabs.Main:AddToggle("ToggleAutoF", {Title = "Auto Parry", Default = false})
-ToggleAutoF:OnChanged(function(Value)
-    _G.AutoF = Value
+local Player = Players.LocalPlayer
+local DashRemote = ReplicatedStorage:WaitForChild("Dash")
+
+local ToggleAuto = Tabs.Main:AddToggle("ToggleAutoF", {
+    Title = "Auto F Toggle",
+    Default = false
+})
+
+ToggleAuto:OnChanged(function(val)
+    _G.AutoFEnabled = val
 end)
 
-local ClickSpeed = 0.0001
+local SpeedSlider = Tabs.Main:AddSlider("SpeedSlider", {
+    Title = "Delay (ms)",
+    Min = 0.1,
+    Max = 1000,
+    Default = 200,
+    Rounding = 1,
+    Callback = function(val)
+        _G.FDelay = val / 1000
+    end
+})
+
+_G.FDelay = 0.2
 
 spawn(function()
     while task.wait() do
-        if _G.AutoF then
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
-            task.wait(0.05)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
-            task.wait(math.max(ClickSpeed, 0.03))
+        if _G.AutoFEnabled and DashRemote then
+            DashRemote:FireServer()
+            task.wait(_G.FDelay)
         end
     end
 end)
-
-local SliderSpeed = Tabs.Main:AddSlider("SliderSpeed", {
-    Title = "Click Speed (ms)",
-    Description = "",
-    Default = 1,
-    Min = 0.1,
-    Max = 1000,
-    Rounding = 1,
-    Callback = function(Value)
-        ClickSpeed = Value / 1000
-    end
-})
+    
 local ToggleProAim = Tabs.Main:AddToggle("ToggleProAim", {Title = "Aimbot Ball", Default = false})
 ToggleProAim:OnChanged(function(Value)
     _G.ToggleProAim = Value
