@@ -1,4 +1,4 @@
-if game.GameId == 5430301679 then
+if game.GameId == 4777817887 then
 game.StarterGui:SetCore("SendNotification", {
     Title = "Solitude Hub",
     Text = "Success Loading",
