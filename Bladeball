@@ -67,20 +67,37 @@ spawn(function()
         end
     end
 end)
-local ToggleProok = Tabs.Main:AddToggle("ToggleProok", {Title = "Auto Spam (should not be turned on)", Default = false})
-ToggleProok:OnChanged(function(Value)
-    _G.ToggleProok = Value
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local ToggleAutoF = Tabs.Main:AddToggle("ToggleAutoF", {Title = "Auto Parry", Default = false})
+ToggleAutoF:OnChanged(function(Value)
+    _G.AutoF = Value
 end)
 
+local ClickSpeed = 0.0001
+
 spawn(function()
-    while task.wait(-1011010100) do
-        if _G.ToggleProok then
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
-            task.wait(-1011010100)
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+    while task.wait() do
+        if _G.AutoF then
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+            task.wait(0.05)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+            task.wait(ClickSpeed)
         end
     end
 end)
+
+local SliderSpeed = Tabs.Main:AddSlider("SliderSpeed", {
+    Title = "Click Speed (ms)",
+    Description = "",
+    Default = 1,
+    Min = 0.1,
+    Max = 1000,
+    Rounding = 1,
+    Callback = function(Value)
+        ClickSpeed = Value / 1000
+    end
+})
 local ToggleProAim = Tabs.Main:AddToggle("ToggleProAim", {Title = "Aimbot Ball", Default = false})
 ToggleProAim:OnChanged(function(Value)
     _G.ToggleProAim = Value
