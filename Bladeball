@@ -67,6 +67,7 @@ spawn(function()
         end
     end
 end)
+local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local ToggleAutoF = Tabs.Main:AddToggle("ToggleAutoF", {Title = "Auto Parry", Default = false})
@@ -82,7 +83,7 @@ spawn(function()
             VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
             task.wait(0.05)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
-            task.wait(ClickSpeed)
+            task.wait(math.max(ClickSpeed, 0.03))
         end
     end
 end)
