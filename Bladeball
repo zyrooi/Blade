@@ -126,21 +126,36 @@ spawn(function()
         end
     end
 end)
-local ToggleAutoParry = Tabs.Main:AddToggle("ToggleAutoParry", {Title = "Auto Parry", Default = false})
-ToggleAutoParry:OnChanged(function(Value)
-    _G.ToggleAutoParry = Value
+local ToggleMove = Tabs.Main:AddToggle("ToggleMove", {Title = "Auto Parry", Default = false})
+ToggleMove:OnChanged(function(Value)
+    _G.ToggleMove = Value
 end)
 
 spawn(function()
+    local TweenService = game:GetService("TweenService")
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    local centerOffset = Vector3.new(0, -8, 0)
+    local radius = 20
+    local angleStep = math.rad(30)
+
     while task.wait(0.1) do
-        if _G.ToggleAutoParry then
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local humanoid = character:FindFirstChild("Humanoid")
-            if humanoid then
-                local ball = game.Workspace:FindFirstChild("Ball")
-                if ball and (ball.Position - character.HumanoidRootPart.Position).Magnitude < 10 then
-                end
+        if _G.ToggleMove then
+            local center = hrp.Position + centerOffset
+            for angle = 0, math.pi * 2, angleStep do
+                if not _G.ToggleMove then break end
+                local x = center.X + math.cos(angle) * radius
+                local z = center.Z + math.sin(angle) * radius
+                local pos = Vector3.new(x, center.Y, z)
+                local distance = (hrp.Position - pos).Magnitude
+                local time = distance / 300
+                local tween = TweenService:Create(hrp, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(pos)})
+                tween:Play()
+                tween.Completed:Wait()
+                if not _G.ToggleMove then break end
+                task.wait(0.2)
             end
         end
     end
