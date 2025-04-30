@@ -143,6 +143,12 @@ spawn(function()
 
     while task.wait(0.1) do
         if _G.ToggleMove then
+            for _, part in ipairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+
             local center = hrp.Position + centerOffset
             for angle = 0, math.pi * 2, angleStep do
                 if not _G.ToggleMove then break end
