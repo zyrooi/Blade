@@ -472,6 +472,41 @@ Tabs.Main:AddButton({
         updatePlayerList()
     end
 })
+Tabs.Main:AddParagraph({
+        Title = "Message Spam",
+        Content = "!______!"
+    })
+local ToggleAutoChat = false
+local MessageToSend = ""
+
+local Input = Tabs.Main:AddInput("MessageInput", {
+    Title = "Message",
+    Numeric = false,
+    Finished = false,
+    Default = "",
+    Placeholder = "",
+    Callback = function(Value)
+        MessageToSend = Value
+    end
+})
+
+local Toggle = Tabs.Main:AddToggle("AutoChatToggle", {
+    Title = "Auto Spam Chat",
+    Default = false
+})
+
+Toggle:OnChanged(function(Value)
+    ToggleAutoChat = Value
+end)
+
+spawn(function()
+    while true do
+        if ToggleAutoChat then
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(MessageToSend, "All")
+            wait(1) 
+        end
+    end
+end)
 else
 game.Players.LocalPlayer:Kick("[ Not Support ]")
 end
