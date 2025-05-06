@@ -24,7 +24,7 @@ I:AddToggle({
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
             task.wait()
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
-            task.wait(1)
+            task.wait()
         end
     end
 })
