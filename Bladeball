@@ -7,506 +7,228 @@ game.StarterGui:SetCore("SendNotification", {
     Callback = function()
     end
 })
-repeat task.wait() until game:IsLoaded()
-
-getgenv().Image = "rbxthumb://type=Asset&id=103635972484891&w=420&h=420"
-getgenv().ToggleUI = "LeftControl"
-
-task.spawn(function()
-    if not getgenv().LoadedMobileUI then
-        getgenv().LoadedMobileUI = true
-        local OpenUI = Instance.new("ScreenGui")
-        local ImageButton = Instance.new("ImageButton")
-        local UICorner = Instance.new("UICorner")
-        OpenUI.Name = "OpenUI"
-        OpenUI.Parent = game:GetService("CoreGui")
-        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        ImageButton.Parent = OpenUI
-        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
-        ImageButton.BackgroundTransparency = 0.8
-        ImageButton.Position = UDim2.new(0, 5, 0, 5)
-        ImageButton.Size = UDim2.new(0, 58, 0, 58)
-        ImageButton.Image = getgenv().Image
-        ImageButton.Draggable = false
-        ImageButton.Transparency = 1
-        UICorner.CornerRadius = UDim.new(100)
-        UICorner.Parent = ImageButton
-        ImageButton.MouseButton1Click:Connect(function()
-            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
-        end)
-    end
-end)
-
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
-local Window = Fluent:CreateWindow({
-    Title = "Solitude Hub [ Premium ]",
-    SubTitle = "By Ziugpro",
-    TabWidth = 130,
-    Size = UDim2.fromOffset(505, 355),
-    Acrylic = true,
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
+local MaruLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Setting/refs/heads/main/427daa95-6994-4738-805e-c1c4c5b577c7.txt"))()
+local A = MaruLib:AddWindows()
+local T1 = A:T({ Name = "General", })
+local T2 = A:T({ Name = "Server", })
+local I = T1:AddSection("Left", {
+    Name = "General"
 })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
-    
-}
-local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Spam", Default = false})
-TogglePro:OnChanged(function(Value)
-    _G.TogglePro = Value
-end)
+I:AddToggle({
+    Name = "Auto Spam",
+    Callback = function(state)
+        _G.ToggleSpam = state
 
-spawn(function()
-    while task.wait(1) do
-        if _G.TogglePro then
+        while _G.ToggleSpam do
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
             task.wait()
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+            task.wait(1)
         end
-    end
-end)
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-
-local Player = Players.LocalPlayer
-local DashRemote = ReplicatedStorage:WaitForChild("Dash")
-
-local ToggleAuto = Tabs.Main:AddToggle("ToggleAutoF", {
-    Title = "Auto F Toggle",
-    Default = false
-})
-
-ToggleAuto:OnChanged(function(val)
-    _G.AutoFEnabled = val
-end)
-
-local SpeedSlider = Tabs.Main:AddSlider("SpeedSlider", {
-    Title = "Delay (ms)",
-    Min = 0.1,
-    Max = 1000,
-    Default = 200,
-    Rounding = 1,
-    Callback = function(val)
-        _G.FDelay = val / 1000
     end
 })
 
-_G.FDelay = 0.2
-
-spawn(function()
-    while task.wait() do
-        if _G.AutoFEnabled and DashRemote then
-            DashRemote:FireServer()
-            task.wait(_G.FDelay)
-        end
+I:AddToggle({
+    Name = "Auto Parry",
+    Callback = function()
     end
-end)
-    
-local ToggleProAim = Tabs.Main:AddToggle("ToggleProAim", {Title = "Aimbot Ball", Default = false})
-ToggleProAim:OnChanged(function(Value)
-    _G.ToggleProAim = Value
-end)
+})
 
-spawn(function()
-    while task.wait(0.1) do
-        if _G.ToggleProAim then
-            local players = game:GetService("Players")
-            local localPlayer = players.LocalPlayer
-            local camera = game:GetService("Workspace").CurrentCamera
+I:AddToggle({
+    Name = "Auto Carry",
+    Callback = function()
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.F, false, game)
+        task.wait()
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.F, false, game)
+    end
+})
 
-            for _, obj in pairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") and string.lower(obj.Name):find("ball") then
-                    camera.CFrame = CFrame.new(camera.CFrame.Position, obj.Position)
-                    break
-                end
+I:AddToggle({
+    Name = "Auto Curbs",
+    Callback = function()
+        for _, ball in pairs(workspace:GetDescendants()) do
+            if ball:IsA("BasePart") and ball.Name:lower():find("Ball") then
+                ball.Velocity = ball.Velocity + Vector3.new(
+                    math.random(-20, 20),
+                    math.random(-5, 5),
+                    math.random(-20, 20)
+                )
             end
         end
     end
-end)
-local ToggleCurbs = Tabs.Main:AddToggle("ToggleCurbs", {
-    Title = "Auto Curbs",
-    Default = false
 })
 
-ToggleCurbs:OnChanged(function(Value)
-    _G.CurbsEnabled = Value
-end)
-
-spawn(function()
-    while task.wait() do
-        if _G.CurbsEnabled then
-            for _, ball in pairs(workspace:GetDescendants()) do
-                if ball:IsA("BasePart") and ball.Name:lower():find("ball") then
-                    ball.Velocity = ball.Velocity + Vector3.new(
-                        math.random(-20, 20),
-                        math.random(-5, 5),
-                        math.random(-20, 20)
-                    )
-                end
+I:AddToggle({
+    Name = "Aimbot Ball",
+    Callback = function()
+        local camera = game:GetService("Workspace").CurrentCamera
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") and string.lower(obj.Name):find("Ball") then
+                camera.CFrame = CFrame.new(camera.CFrame.Position, obj.Position)
+                break
             end
         end
     end
-end)
-local ToggleMove = Tabs.Main:AddToggle("ToggleMove", {Title = "Auto Parry", Default = false})
-ToggleMove:OnChanged(function(Value)
-    _G.ToggleMove = Value
-end)
-
-spawn(function()
-    local TweenService = game:GetService("TweenService")
+})
+local I = T1:AddSection("Left", {
+    Name = "Player"
+})
+I:AddButton({
+  Name = "Freeze All Player",
+  Callback = function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
-    local hrp = character:WaitForChild("HumanoidRootPart")
 
-    local centerOffset = Vector3.new(0, -8, 0)
-    local radius = 20
-    local angleStep = math.rad(30)
-
-    while task.wait(0.1) do
-        if _G.ToggleMove then
-            for _, part in ipairs(character:GetDescendants()) do
+    local function freezePlayer(targetPlayer)
+        local character = targetPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.PlatformStand = true
+            for _, part in pairs(character:GetChildren()) do
                 if part:IsA("BasePart") then
-                    part.CanCollide = false
+                    part.Anchored = true
                 end
             end
+        end
+    end
 
-            local center = hrp.Position + centerOffset
-            for angle = 0, math.pi * 2, angleStep do
-                if not _G.ToggleMove then break end
-                local x = center.X + math.cos(angle) * radius
-                local z = center.Z + math.sin(angle) * radius
-                local pos = Vector3.new(x, center.Y, z)
-                local distance = (hrp.Position - pos).Magnitude
-                local time = distance / 300
-                local tween = TweenService:Create(hrp, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(pos)})
-                tween:Play()
-                tween.Completed:Wait()
-                if not _G.ToggleMove then break end
-                task.wait(0.2)
+    local function unfreezePlayer(targetPlayer)
+        local character = targetPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.PlatformStand = false
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.Anchored = false
+                end
             end
         end
     end
-end)
-Tabs.Main:AddParagraph({
-        Title = "LocalPlayer",
-        Content = "!______!"
-    })
-local Players = game:GetService("Players")
 
-local playerNames = {}
-for _, player in pairs(Players:GetPlayers()) do
-	table.insert(playerNames, player.Name)
-end
-
-local DropdownPlayer = Tabs.Main:AddDropdown("DropdownPlayer", {
-	Title = "Select Player",
-	Values = playerNames,
-	Multi = false,
-	Default = 1,
-})
-
-Tabs.Main:AddButton({
-	Title = "Freeze Player",
-	Description = "",
-	Callback = function()
-		local selected = Dropdown.Value
-		local player = Players:FindFirstChild(selected)
-		if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-			player.Character.HumanoidRootPart.Anchored = true
-		end
-	end
-})
-local Players = game:GetService("Players")
-
-local selectedPlayerName = ""
-
-local Input = Tabs.Main:AddInput("Input", {
-	Title = "Name Player:",
-	Default = "",
-	Numeric = false,
-	Finished = false,
-	Placeholder = "",
-	Callback = function(Value)
-		selectedPlayerName = Value
-	end
-})
-
-Tabs.Main:AddButton({
-	Title = "Freeze Player",
-	Description = "",
-	Callback = function()
-		local selected = selectedPlayerName
-		local player = Players:FindFirstChild(selected)
-		if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-			player.Character.HumanoidRootPart.Anchored = true
-		end
-	end
-})
-local Players = game:GetService("Players")
-
-Tabs.Main:AddButton({
-	Title = "Freeze All Players Except Me",
-	Description = "",
-	Callback = function()
-		local myPlayer = Players.LocalPlayer
-		for _, player in pairs(Players:GetPlayers()) do
-			if player ~= myPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-				player.Character.HumanoidRootPart.Anchored = true
-			end
-		end
-	end
-})
-
-local Players = game:GetService("Players")
-
-local playerNames = {}
-for _, player in pairs(Players:GetPlayers()) do
-	table.insert(playerNames, player.Name)
-end
-
-local selectedPlayerName = ""
-local kickReason = ""
-
-local DropdownKick = Tabs.Main:AddDropdown("DropdownKick", {
-	Title = "Select Player:",
-	Values = playerNames,
-	Multi = false,
-	Default = 1,
-	Callback = function(Value)
-		selectedPlayerName = Value
-	end
-})
-
-local ReasonInput = Tabs.Main:AddInput("Reason Input", {
-	Title = "Kick Reason:",
-	Default = "",
-	Numeric = false,
-	Finished = false,
-	Placeholder = "Enter reason for kick",
-	Callback = function(Value)
-		kickReason = Value
-	end
-})
-
-Tabs.Main:AddButton({
-	Title = "Kick Player",
-	Description = "",
-	Callback = function()
-		local selected = selectedPlayerName
-		local player = Players:FindFirstChild(selected)
-		if player then
-			player:Kick(kickReason)
-		end
-	end
-})
-local Players = game:GetService("Players")
-
-local playerNames = {}
-for _, player in pairs(Players:GetPlayers()) do
-	table.insert(playerNames, player.Name)
-end
-
-local selectedPlayerName = ""
-
-local DropKill = Tabs.Main:AddDropdown("DropKill", {
-	Title = "Select Player to Kill:",
-	Values = playerNames,
-	Multi = false,
-	Default = 1,
-	Callback = function(Value)
-		selectedPlayerName = Value
-	end
-})
-
-Tabs.Main:AddButton({
-	Title = "Kill Player",
-	Description = "",
-	Callback = function()
-		local selected = selectedPlayerName
-		local player = Players:FindFirstChild(selected)
-		if player and player.Character and player.Character:FindFirstChild("Humanoid") then
-			player.Character.Humanoid.Health = 0
-		end
-	end
-})
-local Players = game:GetService("Players")
-local Camera = workspace.CurrentCamera
-
-local playerNames = {}
-for _, player in pairs(Players:GetPlayers()) do
-	table.insert(playerNames, player.Name)
-end
-
-local selectedPlayerName = ""
-local originalSubject = Camera.CameraSubject
-
-local DropView = Tabs.Main:AddDropdown("DropView", {
-	Title = "Select Player to View:",
-	Values = playerNames,
-	Multi = false,
-	Default = 1,
-	Callback = function(Value)
-		selectedPlayerName = Value
-	end
-})
-
-Tabs.Main:AddButton({
-	Title = "View Player Camera",
-	Description = "",
-	Callback = function()
-		local selected = selectedPlayerName
-		local player = Players:FindFirstChild(selected)
-		if player and player.Character and player.Character:FindFirstChild("Humanoid") then
-			Camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
-		end
-	end
-})
-
-Tabs.Main:AddButton({
-	Title = "Reset Camera",
-	Description = "",
-	Callback = function()
-		local myPlayer = Players.LocalPlayer
-		if myPlayer and myPlayer.Character and myPlayer.Character:FindFirstChild("Humanoid") then
-			Camera.CameraSubject = myPlayer.Character:FindFirstChild("Humanoid")
-		end
-	end
-})
-Tabs.Main:AddParagraph({
-        Title = "Weapon",
-        Content = "!______!"
-    })
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
-local weaponList = {}
-
-for _, item in pairs(character:GetChildren()) do
-    if item:IsA("Script") or item:IsA("LocalScript") or item:IsA("ModuleScript") then
-        table.insert(weaponList, item.Name)
-    end
-end
-
-local selectedWeaponName = ""
-
-local WeaponDropdown = Tabs.Main:AddDropdown("Weapon Dropdown", {
-    Title = "Select Weapon",
-    Values = weaponList,
-    Multi = false,
-    Default = 1,
-    Callback = function(Value)
-        selectedWeaponName = Value
-    end
-})
-
-Tabs.Main:AddButton({
-    Title = "Hide Weapon",
-    Description = "",
-    Callback = function()
-        for _, weapon in pairs(character:GetChildren()) do
-            if weapon.Name == selectedWeaponName and (weapon:IsA("Script") or weapon:IsA("LocalScript") or weapon:IsA("ModuleScript")) then
-                weapon.Enabled = false
-            end
+    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+        if targetPlayer ~= player then
+            freezePlayer(targetPlayer)
+        else
+            unfreezePlayer(targetPlayer)
         end
     end
+  end
 })
-Tabs.Main:AddParagraph({
-        Title = "Troll Player",
-        Content = "!______!"
-    })
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
-local targetPlayer = nil
-
-local playerNames = {}
-for _, player in pairs(Players:GetPlayers()) do
-    table.insert(playerNames, player.Name)
+local playersList = {}
+for _, player in pairs(game.Players:GetPlayers()) do
+    table.insert(playersList, player.Name)
 end
 
-local PlayerDropdown = Tabs.Main:AddDropdown("Player Dropdown", {
-    Title = "Select Target Player",
-    Values = playerNames,
-    Multi = false,
-    Default = 1,
-    Callback = function(Value)
-        targetPlayer = Players:FindFirstChild(Value)
-    end
+local dropdownValue = nil
+
+I:AddDropdown({
+  Name = "Player List",
+  Options = playersList,
+  Default = "Select Player",
+  Flag = "PlayerList",
+  Callback = function(selectedPlayerName)
+    dropdownValue = selectedPlayerName
+  end
 })
 
-local function updatePlayerList()
-    playerNames = {}
-    for _, player in pairs(Players:GetPlayers()) do
-        table.insert(playerNames, player.Name)
+I:AddButton({
+  Name = "Freeze Player",
+  Callback = function()
+    if dropdownValue then
+      local targetPlayer = game.Players:FindFirstChild(dropdownValue)
+      if targetPlayer then
+        targetPlayer.Character.HumanoidRootPart.Anchored = true
+      end
     end
-    PlayerDropdown.Values = playerNames
+  end
+})
+local playersList = {}
+for _, player in pairs(game.Players:GetPlayers()) do
+    table.insert(playersList, player.Name)
 end
 
-Tabs.Main:AddButton({
-    Title = "Troll Target",
-    Description = "Make the screen blurry for the selected player",
+local dropdownValue = nil
+
+I:AddDropdown({
+  Name = "Player List",
+  Options = playersList,
+  Default = "Select Player",
+  Flag = "PlayerList",
+  Callback = function(selectedPlayerName)
+    dropdownValue = selectedPlayerName
+  end
+})
+
+I:AddButton({
+  Name = "Kick Player",
+  Callback = function()
+    if dropdownValue then
+      local targetPlayer = game.Players:FindFirstChild(dropdownValue)
+      if targetPlayer then
+        targetPlayer:Kick("You have been kicked from the game.")
+      end
+    end
+  end
+})
+local M = T1:AddSection("Right", {
+    Name = "Webhook"
+})
+
+M:AddInput({
+  Name = "Webhook",
+  Callback = function()
+  end
+})
+
+M:AddToggle({
+    Name = "Send Number Of Wins",
     Callback = function()
-        if targetPlayer then
-            local screenGui = targetPlayer:FindFirstChildOfClass("PlayerGui")
-            if screenGui then
-                local blurEffect = Instance.new("BlurEffect")
-                blurEffect.Size = 100
-                blurEffect.Parent = screenGui
-
-                wait(1)
-                blurEffect:Destroy()
-            end
-        end
     end
 })
 
-Tabs.Main:AddButton({
-    Title = "Reset Player List",
-    Description = "Reset the player list in the dropdown",
+M:AddToggle({
+    Name = "Send Number Of Click",
     Callback = function()
-        updatePlayerList()
-    end
-})
-Tabs.Main:AddParagraph({
-        Title = "Message Spam",
-        Content = "!______!"
-    })
-local ToggleAutoChat = false
-local MessageToSend = ""
-
-local Input = Tabs.Main:AddInput("MessageInput", {
-    Title = "Message",
-    Numeric = false,
-    Finished = false,
-    Default = "",
-    Placeholder = "",
-    Callback = function(Value)
-        MessageToSend = Value
     end
 })
 
-local Toggle = Tabs.Main:AddToggle("AutoChatToggle", {
-    Title = "Auto Spam Chat",
-    Default = false
+M:AddInput({
+    Name = "WebHook",
+    Callback = function(value)
+        _G.Webhook = value
+    end
 })
 
-Toggle:OnChanged(function(Value)
-    ToggleAutoChat = Value
-end)
-
-spawn(function()
-    while true do
-        if ToggleAutoChat then
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(MessageToSend, "All")
-            wait(1) 
-        end
+M:AddToggle({
+    Name = "Auto JobId Send",
+    Callback = function()
     end
-end)
+})
+local CI = T2:AddSection("Left", {
+    Name = "Server"
+})
+CI:AddInput({
+  Name = "Job-ID",
+  Callback = function(value)
+    _G.JobId = value
+  end
+})
+CI:AddButton({
+  Name = "Join Server",
+  Callback = function()
+    if _G.JobId then
+      local jobId = _G.JobId
+      game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+    end
+  end
+})
+CI:AddButton({
+  Name = "Join Random Server",
+  Callback = function()
+    local servers = game:GetService("ReplicatedStorage"):WaitForChild("__ServerBrowser"):GetChildren()
+    local randomServer = servers[math.random(1, #servers)]
+    game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", randomServer)
+  end
+})
 else
 game.Players.LocalPlayer:Kick("[ Not Support ]")
 end
