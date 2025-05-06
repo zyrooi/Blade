@@ -28,10 +28,17 @@ I:AddToggle({
         end
     end
 })
-
 I:AddToggle({
     Name = "Auto Parry",
-    Callback = function()
+    Callback = function(state)
+        _G.ToggleParry = state
+
+        while _G.ToggleParry do
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.F, false, game)
+            task.wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.F, false, game)
+            task.wait()
+        end
     end
 })
 
