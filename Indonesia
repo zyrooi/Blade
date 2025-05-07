@@ -1,0 +1,474 @@
+local PremiumKeys = {  
+    "JRTtibghwXeykmqzh4r3oCvzf35xtb",  
+}  
+  
+local BlacklistKeys = {  
+    ["abc123"] = "Hành vi gian lận bị phát hiện",  
+    ["badkey456"] = "Vi phạm điều khoản sử dụng",  
+    ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
+}  
+  
+local function isPremiumKey(key)  
+    for _, v in ipairs(PremiumKeys) do  
+        if v == key then  
+            return true  
+        end  
+    end  
+    return false  
+end  
+  
+local function getBlacklistReason(key)  
+    return BlacklistKeys[key]  
+end  
+  
+if not script_key or getBlacklistReason(script_key) then  
+    local reason = getBlacklistReason(script_key) or "Key bị chặn"  
+    game:GetService("Players").LocalPlayer:Kick(reason)  
+    return  
+end  
+  
+if isPremiumKey(script_key) then  
+if game.GameId == 4777817887 then
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Solitude Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=103635972484891&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+local MaruLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Setting/refs/heads/main/427daa95-6994-4738-805e-c1c4c5b577c7.txt"))()
+local A = MaruLib:AddWindows()
+local T1 = A:T({ Name = "Umun", })
+local T2 = A:T({ Name = "Lain-lain", })
+local I = T1:AddSection("Left", {
+    Name = "Umum"
+})
+
+I:AddToggle({
+    Name = "Spam Otomatis",
+    Callback = function(state)
+        _G.ToggleSpam = state
+
+        while _G.ToggleSpam do
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+            task.wait()
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+            task.wait()
+        end
+    end
+})
+I:AddToggle({
+    Name = "Tangkisan Otomatis",
+    Callback = function(state)
+        _G.ToggleParry = state
+
+        while _G.ToggleParry do
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.F, false, game)
+            task.wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.F, false, game)
+            task.wait()
+        end
+    end
+})
+
+I:AddToggle({
+    Name = "Bawa Otomatis",
+    Callback = function()
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.F, false, game)
+        task.wait()
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.F, false, game)
+    end
+})
+
+I:AddToggle({
+    Name = "Pembatas Jalan Otomatis",
+    Callback = function()
+        for _, ball in pairs(workspace:GetDescendants()) do
+            if ball:IsA("BasePart") and ball.Name:lower():find("Ball") then
+                ball.Velocity = ball.Velocity + Vector3.new(
+                    math.random(-20, 20),
+                    math.random(-5, 5),
+                    math.random(-20, 20)
+                )
+            end
+        end
+    end
+})
+
+I:AddToggle({
+    Name = "Bola Aimbot",
+    Callback = function()
+        local camera = game:GetService("Workspace").CurrentCamera
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") and string.lower(obj.Name):find("Ball") then
+                camera.CFrame = CFrame.new(camera.CFrame.Position, obj.Position)
+                break
+            end
+        end
+    end
+})
+local I = T1:AddSection("Left", {
+    Name = "Pemain"
+})
+I:AddButton({
+  Name = "Bekukan Semua Pemain",
+  Callback = function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local function freezePlayer(targetPlayer)
+        local character = targetPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.PlatformStand = true
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.Anchored = true
+                end
+            end
+        end
+    end
+
+    local function unfreezePlayer(targetPlayer)
+        local character = targetPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.PlatformStand = false
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.Anchored = false
+                end
+            end
+        end
+    end
+
+    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+        if targetPlayer ~= player then
+            freezePlayer(targetPlayer)
+        else
+            unfreezePlayer(targetPlayer)
+        end
+    end
+  end
+})
+local playersList = {}
+for _, player in pairs(game.Players:GetPlayers()) do
+    table.insert(playersList, player.Name)
+end
+
+local dropdownValue = nil
+
+I:AddDropdown({
+  Name = "Daftar Pemain",
+  Options = playersList,
+  Default = "Select Player",
+  Flag = "PlayerList",
+  Callback = function(selectedPlayerName)
+    dropdownValue = selectedPlayerName
+  end
+})
+
+I:AddButton({
+  Name = "Pemain Beku",
+  Callback = function()
+    if dropdownValue then
+      local targetPlayer = game.Players:FindFirstChild(dropdownValue)
+      if targetPlayer then
+        targetPlayer.Character.HumanoidRootPart.Anchored = true
+      end
+    end
+  end
+})
+local playersList = {}
+for _, player in pairs(game.Players:GetPlayers()) do
+    table.insert(playersList, player.Name)
+end
+
+local dropdownValue = nil
+
+I:AddDropdown({
+  Name = "Daftar Pemain",
+  Options = playersList,
+  Default = "Select Player",
+  Flag = "PlayerList",
+  Callback = function(selectedPlayerName)
+    dropdownValue = selectedPlayerName
+  end
+})
+
+I:AddButton({
+  Name = "Pemain Tendangan",
+  Callback = function()
+    if dropdownValue then
+      local targetPlayer = game.Players:FindFirstChild(dropdownValue)
+      if targetPlayer then
+        targetPlayer:Kick("You have been kicked from the game.")
+      end
+    end
+  end
+})
+local I = T1:AddSection("Left", {
+    Name = "Esp"
+})
+I:AddToggle({
+    Name = "Pemain Esp",
+    Callback = function(state)
+        if state then
+            local function createESP(player)
+                if player.Character and player.Character:FindFirstChild("Head") then
+                    local head = player.Character.Head
+                    local billboardGui = Instance.new("BillboardGui")
+                    billboardGui.Adornee = head
+                    billboardGui.Parent = player.Character
+                    billboardGui.Size = UDim2.new(0, 200, 0, 50)
+                    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+                    billboardGui.AlwaysOnTop = true
+
+                    local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    local distanceTag = Instance.new("TextLabel")
+                    distanceTag.Parent = billboardGui
+                    distanceTag.Text = string.format("%.2f studs", distance)
+                    distanceTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    distanceTag.TextStrokeTransparency = 0.5
+                    distanceTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    distanceTag.BackgroundTransparency = 1
+                    distanceTag.Size = UDim2.new(1, 0, 0.3, 0)
+                    distanceTag.Position = UDim2.new(0, 0, 0, 0)
+                    distanceTag.TextScaled = false
+                    distanceTag.Font = Enum.Font.SourceSansBold
+                    distanceTag.TextSize = 22
+
+                    local nameTag = Instance.new("TextLabel")
+                    nameTag.Parent = billboardGui
+                    nameTag.Text = player.Name
+                    nameTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    nameTag.TextStrokeTransparency = 0.5
+                    nameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    nameTag.BackgroundTransparency = 1
+                    nameTag.Size = UDim2.new(1, 0, 0.7, 0)
+                    nameTag.Position = UDim2.new(0, 0, 0.3, 0)
+                    nameTag.TextScaled = false
+                    nameTag.Font = Enum.Font.SourceSansBold
+                    nameTag.TextSize = 22
+
+                    game:GetService("RunService").Heartbeat:Connect(function()
+                        if player.Character and player.Character:FindFirstChild("Head") then
+                            local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                            distanceTag.Text = string.format("%.2f studs", distance)
+                            billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+                        end
+                    end)
+                end
+            end
+
+            game.Players.PlayerAdded:Connect(function(player)
+                player.CharacterAdded:Connect(function()
+                    createESP(player)
+                end)
+            end)
+
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    createESP(player)
+                end
+            end
+        else
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    for _, v in ipairs(player.Character:GetChildren()) do
+                        if v:IsA("BillboardGui") then
+                            v:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end
+})
+I:AddToggle({
+    Name = "Bola Esp",
+    Callback = function(state)
+        if state then
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") and string.find(obj.Name, "Ball") then
+                    local billboardGui = Instance.new("BillboardGui")
+                    billboardGui.Adornee = obj
+                    billboardGui.Parent = obj
+                    billboardGui.Size = UDim2.new(0, 200, 0, 50)
+                    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+                    billboardGui.AlwaysOnTop = true
+
+                    local distance = (obj.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    local distanceTag = Instance.new("TextLabel")
+                    distanceTag.Parent = billboardGui
+                    distanceTag.Text = string.format("%.2f studs", distance)
+                    distanceTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    distanceTag.TextStrokeTransparency = 0.5
+                    distanceTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    distanceTag.BackgroundTransparency = 1
+                    distanceTag.Size = UDim2.new(1, 0, 0.3, 0)
+                    distanceTag.Position = UDim2.new(0, 0, 0, 0)
+                    distanceTag.TextScaled = false
+                    distanceTag.Font = Enum.Font.SourceSansBold
+                    distanceTag.TextSize = 22
+
+                    local nameTag = Instance.new("TextLabel")
+                    nameTag.Parent = billboardGui
+                    nameTag.Text = obj.Name
+                    nameTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    nameTag.TextStrokeTransparency = 0.5
+                    nameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    nameTag.BackgroundTransparency = 1
+                    nameTag.Size = UDim2.new(1, 0, 0.7, 0)
+                    nameTag.Position = UDim2.new(0, 0, 0.3, 0)
+                    nameTag.TextScaled = false
+                    nameTag.Font = Enum.Font.SourceSansBold
+                    nameTag.TextSize = 22
+
+                    game:GetService("RunService").Heartbeat:Connect(function()
+                        if obj and obj.Parent then
+                            local d = (obj.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                            distanceTag.Text = string.format("%.2f studs", d)
+                        end
+                    end)
+                end
+            end
+        else
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") and obj:FindFirstChildOfClass("BillboardGui") then
+                    obj:FindFirstChildOfClass("BillboardGui"):Destroy()
+                end
+            end
+        end
+    end
+})
+local EI = T1:AddSection("Left", {
+    Name = "Bersembuny"
+})
+EI:AddToggle({
+    Name = "Sembunyikan Animasi",
+    Callback = function()
+    end
+})
+EI:AddToggle({
+    Name = "Sembunyikan Senjata",
+    Callback = function()
+    end
+})
+EI:AddToggle({
+    Name = "Sembunyikan Anda",
+    Callback = function()
+    end
+})
+local M = T1:AddSection("Right", {
+    Name = "KaitWeb"
+})
+
+M:AddInput({
+  Name = "KaitWeb",
+  Callback = function()
+  end
+})
+
+M:AddToggle({
+    Name = "Kirim Jumlah Kemenangan",
+    Callback = function()
+    end
+})
+
+M:AddToggle({
+    Name = "Kirim Jumlah Klik",
+    Callback = function()
+    end
+})
+
+M:AddInput({
+    Name = "KaitWeb",
+    Callback = function(value)
+        _G.Webhook = value
+    end
+})
+
+M:AddToggle({
+    Name = "Kirim JobId Otomatis",
+    Callback = function()
+    end
+})
+local CI = T2:AddSection("Left", {
+    Name = "Pelayan"
+})
+CI:AddInput({
+  Name = "Job-ID",
+  Callback = function(value)
+    _G.JobId = value
+  end
+})
+CI:AddButton({
+  Name = "Bergabung dengan Server",
+  Callback = function()
+    if _G.JobId then
+      local jobId = _G.JobId
+      game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+    end
+  end
+})
+CI:AddButton({
+  Name = "Bergabunglah dengan Server Acak",
+  Callback = function()
+    local servers = game:GetService("ReplicatedStorage"):WaitForChild("__ServerBrowser"):GetChildren()
+    local randomServer = servers[math.random(1, #servers)]
+    game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", randomServer)
+  end
+})
+local MU = T1:AddSection("Right", {
+    Name = "Lainnya"
+})
+MU:AddButton({
+  Name = "AntiLag",
+  Callback = function()
+  local decalsyeeted = true
+        local g = game
+        local w = g.Workspace
+        local l = g.Lighting
+        local t = w.Terrain
+        sethiddenproperty(l,"Technology",2)
+        sethiddenproperty(t,"Decoration",false)
+        t.WaterWaveSize = 0
+        t.WaterWaveSpeed = 0
+        t.WaterReflectance = 0
+        t.WaterTransparency = 0
+        l.GlobalShadows = false
+        l.FogEnd = 9e9
+        l.Brightness = 0
+        settings().Rendering.QualityLevel = "Level01"
+        for i, v in pairs(g:GetDescendants()) do
+            if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+                v.Material = "Plastic"
+                v.Reflectance = 0
+            elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+                v.Transparency = 1
+            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                v.Lifetime = NumberRange.new(0)
+            elseif v:IsA("Explosion") then
+                v.BlastPressure = 1
+                v.BlastRadius = 1
+            elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                v.Enabled = false
+            elseif v:IsA("MeshPart") then
+                v.Material = "Plastic"
+                v.Reflectance = 0
+                v.TextureID = 10385902758728957
+            end
+        end
+        for i, e in pairs(l:GetChildren()) do
+            if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+                e.Enabled = false
+            end
+        end
+  end
+})
+else  
+    game:GetService("Players").LocalPlayer:Kick("Invald Game")  
+end
+ else  
+    game:GetService("Players").LocalPlayer:Kick("Invalid Key")  
+end
