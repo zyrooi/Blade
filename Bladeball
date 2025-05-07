@@ -10,8 +10,7 @@ game.StarterGui:SetCore("SendNotification", {
 local MaruLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Setting/refs/heads/main/427daa95-6994-4738-805e-c1c4c5b577c7.txt"))()
 local A = MaruLib:AddWindows()
 local T1 = A:T({ Name = "General", })
-local T2 = A:T({ Name = "Server", })
-local T3 = A:T({ Name = "Hide Ui", })
+local T2 = A:T({ Name = "Misc", })
 local I = T1:AddSection("Left", {
     Name = "General"
 })
