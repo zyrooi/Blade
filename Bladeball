@@ -1,5 +1,4 @@
 if game.GameId == 4777817887 then
-game.Players.LocalPlayer:Kick("Script Is Being Redone Please Wait")
 game.StarterGui:SetCore("SendNotification", {
     Title = "Solitude Hub",
     Text = "Success Loading",
