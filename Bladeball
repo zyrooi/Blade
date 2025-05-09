@@ -389,6 +389,20 @@ CI:AddButton({
     game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", randomServer)
   end
 })
+local CAC = T2:AddSection("Right", {
+    Name = "Dupe Weapon"
+})
+CAC:AddInput({
+  Name = "Name Weapon",
+  Callback = function()
+  end
+})
+CAC:AddButton({
+  Name = "Dupe Weapon",
+  Callback = function()
+  
+  end
+})
 local MU = T1:AddSection("Right", {
     Name = "Misc"
 })
